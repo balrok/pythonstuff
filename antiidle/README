@@ -1,0 +1,4 @@
+intended to play the game anti-idle
+make sure, that the game and the surrounding black area are good visible and start with the button opened
+
+libraries used: PyMouse and gtk
