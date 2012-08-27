@@ -62,8 +62,8 @@ def main():
         #butWin.getScreenShot()
         #butWin.current_screen.save("button%d.png"%i, "png")
         #time.sleep(0.2)
-        if time.time()-start > 60:
-            sys.exit()
+        #if time.time()-start > 60:
+        #    sys.exit()
 
         print but
 
