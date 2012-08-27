@@ -1,0 +1,101 @@
+a parser and unparser for europa universalis 3 savegame files
+
+Also it containse an algorithm to minfy the savegame files a bit..
+It removes all old wars (previous_war)
+It removes all unneeded historic information of provinces (see example below)
+
+Example:
+history=
+{
+    add_core="SWE"
+    owner="SWE"
+    controller="SWE"
+    culture=swedish
+    religion=catholic
+    hre=no
+    base_tax=5.000
+    trade_goods=grain
+    manpower=3.000
+    fort1=yes
+    capital="Stockholm"
+    citysize=5500.000
+    temple=yes
+    workshop=yes
+    marketplace=yes
+    discovered_by="eastern"
+    discovered_by="western"
+    discovered_by="muslim"
+    discovered_by="ottoman"
+    1668.2.16=
+    {
+        citysize=47440.796
+    }
+    1670.1.1=
+    {
+        citysize=48016.952
+    }
+    1678.8.11=
+    {
+        advisor=
+        {
+            name="Sven von Ascheberg"
+            type=fortification_expert
+            skill=2
+            location=1
+            home="SWE"
+            date="1678.8.11"
+            hire_date="1690.11.27"
+            move=0
+            id=
+            {
+                id=6009
+                type=39
+            }
+        }
+    }
+}
+
+--------------------------------------------------------------
+gets converted to:
+--------------------------------------------------------------
+
+history=
+{
+    add_core="SWE"
+    owner="SWE"
+    controller="SWE"
+    culture=swedish
+    religion=catholic
+    hre=no
+    base_tax=5.000
+    trade_goods=grain
+    manpower=3.000
+    fort1=yes
+    capital="Stockholm"
+    citysize=5500.000
+    temple=yes
+    workshop=yes
+    marketplace=yes
+    discovered_by="eastern"
+    discovered_by="western"
+    discovered_by="muslim"
+    discovered_by="ottoman"
+    1678.8.11=
+    {
+        advisor=
+        {
+            name="Sven von Ascheberg"
+            type=fortification_expert
+            skill=2
+            location=1
+            home="SWE"
+            date="1678.8.11"
+            hire_date="1690.11.27"
+            move=0
+            id=
+            {
+                id=6009
+                type=39
+            }
+        }
+    }

@@ -1,4 +1,6 @@
 #!/usr/bin/python
+import sys
+import re
 
 # calls a function with 3 items of the generator (current, next1, next2)
 # if next1/next2 wont exist they get the value ""
@@ -82,15 +84,43 @@ def unparse(file, obj, depth=0):
             file.write(padding+"}\r\n")
 
 
-obj = parse(lookahead2(open("autosave.eu3"), fixReader))
+if __name__ == '__main__':
+    if len(sys.argv) < 2:
+        print "usage ./eu3savegame.py sourceSavegame.eu3 > targetSavegame.eu3"
+        print "or ./eu3savegame.py sourceSavegame.eu3 targetSavegame.eu3"
+        print "Source and Target can't be the same!"
+    obj = parse(lookahead2(open(sys.argv[1]), fixReader))
 
-newObj = []
-for i in obj:
-    if i['key']=='REB':
-        for r in i['val']:
-            print r['key']
-    if i['key'] == 'previous_war':
-        continue
-    newObj.append(i)
+    newObj = []
+    # indexes are e,r,t,z
+    for e in obj:
+        if e['key'] == 'previous_war':
+            continue
+        if isinstance(e['val'], (list)):
+            newEVal = []
+            for r in e['val']:
+                if r['key'] == 'history':
+                    newRVal = []
+                    # look into the dates and then delete there everything but the advisors - if no advisors delete the date itself
+                    for t in r['val']:
+                        if re.match(r"[0-9]{4}\.[0-9]{1,2}\.[0-9]{1,2}", t['key']):
+                            newTVal = []
+                            for z in t['val']:
+                                if z['key'] == 'advisor':
+                                    newTVal.append(z)
+                            if newTVal:
+                                newRVal.append({'key':t['key'],'val':newTVal})
+                        else:
+                            newRVal.append(t)
+                    newEVal.append({'key':r['key'], 'val':newRVal})
+                else:
+                    newEVal.append(r)
+            newE = {'key':e['key'], 'val':newEVal}
+        else:
+            newE = e
+        newObj.append(newE)
 
-unparse(open("autosave2.eu3", "w"), newObj)
+    if len(sys.argv) > 2:
+        unparse(open(sys.argv[2], "w"), newObj)
+    else:
+        unparse(sys.stdout, newObj)
