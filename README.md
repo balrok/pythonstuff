@@ -19,4 +19,6 @@ com
 
 
 The current content is:
-* eu3savegame: A commandline util to parse and unparse save-games from europa universalis 3
+* eu3savegame: A util to parse and unparse save-games from europa universalis 3
+* antiidle: A util to play the Flashgame anti-idle - currently only the button-game is supported
+* extension: A util to add an extension point to your project: will load files in a folder based on regex- or name- match
