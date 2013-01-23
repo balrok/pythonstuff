@@ -1,0 +1,9 @@
+intended to help playing return of the mad god (rotmg) on kongregate
+make sure, that the game and the surrounding black area are good visible
+It searches the whole screen for this black color - so it might happen, that tabs with this specific color make the detection fail
+
+What it does:
+Inside constants the positions and colors are marked for healthbar and the money symbol of a healthpot
+If health is below 50 percent it will press f
+
+libraries used: PyMouse, gtk, and pykey
