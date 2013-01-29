@@ -80,14 +80,14 @@ def getArrayColor(color):
 def eqColor(c1, c2):
     return c1[0] == c2[0] and c1[1] == c2[1] and c1[2] == c2[2]
 
-# finds the top,left position of a color
-def findColor(win, color, step=5):
+# finds the top,left position of a color optionally starting at startX and startY
+def findColor(win, color, step=5, startX=0, startY=0):
     # first iterate to find the area around games
     smallestX = -1
     smallestY = -1
     # first search smallestX, smallestY
-    for x in range(0, win.height, step):
-        for y in range(0, win.width, step):
+    for x in range(startX, win.height, step):
+        for y in range(startY, win.width, step):
             if eqColor(win.getPixel(x,y), color):
                 smallestX = x
                 smallestY = y
@@ -97,12 +97,12 @@ def findColor(win, color, step=5):
     return smallestX, smallestY
 
 # finds the top,left position and from there the most right and lowest position
-def findColorArea(win, color, step=5):
+def findColorArea(win, color, step=5, startX=0, startY=0):
     # first iterate to find the area around games
     highestX = -1
     highestY = -1
     x = 0
-    smallestX, smallestY = findColor(win, color, step)
+    smallestX, smallestY = findColor(win, color, step, startX, startY)
     if smallestX > -1:
         for y in range(smallestY, win.width, step):
             x = smallestX

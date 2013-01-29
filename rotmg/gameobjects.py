@@ -39,13 +39,13 @@ class Bar(WindowObject):
         # scan for bgcolor
         self.window.getScreenShot()
         x,y = findColor(self.window, getArrayColor(self.bgcolor))
-        if x>-1 and y>-1:
+        if y>-1:
             x2,y2 = findColor(self.window, getArrayColor(self.barcolor))
             # when hovering over items in a trade it will cover the bar
-            if x2==-1 and y==-1:
-                return 100
+            # which causes to first display background and then healthbar
+            if y2==0:
+                return float(y)/self.width*100
             # we found bg - so not 100 full
-            return float(y)/self.width*100
         return 100
 
 class HealthBar(Bar):

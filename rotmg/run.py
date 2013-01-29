@@ -7,14 +7,25 @@ import time
 from gameobjects import HealthBar
 from gameobjects import HealthPot
 from gameobjects import ManaPot
-from KeyboardUnix import Keyboard
+from autopy import key
 #import sys
 
 
 # finds the area of a kongregate game
 def findGameArea(win):
     print "searching area"
-    return findColorArea(win, getArrayColor("333333"), 1)
+    # favicons often have the same color, but are smaller in size
+    # so ignore this line
+    startX=0
+    x1=0
+    x2=0
+    while abs(x1-x2) < 200:
+        x1, y1, x2, y2 = findColorArea(win, getArrayColor("333333"), 1, startX)
+        if x1 == -1:
+            return None
+        startX=x1+5
+
+    return SubWindow(win, x1, y1, abs(y1-y2), abs(x1-x2))
 
 
 constants = {
@@ -39,14 +50,11 @@ def checkConstants(gameWin):
 
 def main():
     w = Window()
-    kbd = Keyboard()
     while True:
         print "search game area"
         w.getScreenShot()
-        x1, y1, x2, y2 = findGameArea(w)
-        print x1, y1, x2, y2
-        if x1 > -1:
-            gameWin = SubWindow(w, x1, y1, abs(y1-y2), abs(x1-x2))
+        gameWin = findGameArea(w)
+        if gameWin is not None:
             print "found area"
             break
     gameWin.getScreenShot()
@@ -66,6 +74,7 @@ def main():
 
     i=0
     checknextHealth = 0
+    nextSpell = 0
     healthHistory = []
     while True:
         time.sleep(0.05)
@@ -85,15 +94,21 @@ def main():
                 if full>25 and canTakePot:
                     checknextHealth = i+10
                     #healthpot.saveScreenshot("takepot%d"% i)
-                    #healthbar.saveScreenshot("bartakepot%d"% i)
+                    healthbar.saveScreenshot("bartakepot%d"% i)
                     print "send f"
-                    kbd.writeLetter('f')
+                    key.tap('f')
                     healthHistory.append(i)
+
                 else:
-                    checknextHealth = i+50
+                    checknextHealth = i+200
                     # no healthpot left - going home
                     print "send g"
-                    kbd.writeLetter('g')
+                    key.tap('g')
+            elif full < 80:
+                if nextSpell < i:
+                    key.tap(' ')
+                    print "space"
+                    nextSpell=i+200
 
 
 
