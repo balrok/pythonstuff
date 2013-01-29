@@ -1,6 +1,5 @@
 #!/usr/bin/python
 
-from window import eqColor
 from window import findColor
 
 class Button(object):
@@ -43,10 +42,10 @@ class Button(object):
 
         # from the center go most left and most right and take the center again
         for l in range(left, 0, -1):
-            if not eqColor(self.win.getPixel(top,l), self.color):
+            if self.win.getPixel(top,l) != self.color:
                 canContinue = False
                 for jump in range(0,40,2):
-                    if eqColor(self.win.getPixel(top-jump,l), self.color): # try to jump over the text if exist
+                    if self.win.getPixel(top-jump,l) == self.color: # try to jump over the text if exist
                         l-=jump-1
                         canContinue = True
                         break
@@ -55,10 +54,10 @@ class Button(object):
                     continue
                 break
         for l in range(left, left+200, 1):
-            if not eqColor(self.win.getPixel(top,l), self.color):
+            if self.win.getPixel(top,l) != self.color:
                 canContinue = False
                 for jump in range(0,40,2):
-                    if eqColor(self.win.getPixel(top+jump,l), self.color): # try to jump over the text if exist
+                    if self.win.getPixel(top+jump,l) == self.color: # try to jump over the text if exist
                         l+=jump+1
                         canContinue = True
                         break
@@ -70,10 +69,10 @@ class Button(object):
         hCenter = mLeft+((mRight-mLeft)/2)
         # from top,hCenter go most up, and most down - take the center
         for t in range(top, 0, -1):
-            if not eqColor(self.win.getPixel(t,hCenter), self.color):
+            if self.win.getPixel(t,hCenter) != self.color:
                 canContinue = False
                 for jump in range(0,40,2):
-                    if eqColor(self.win.getPixel(t-jump,hCenter), self.color): # try to jump over the text if exist
+                    if self.win.getPixel(t-jump,hCenter) == self.color: # try to jump over the text if exist
                         t-=jump-1
                         canContinue = True
                         break
@@ -82,10 +81,10 @@ class Button(object):
                     continue
                 break
         for t in range(top, top+200, 1):
-            if not eqColor(self.win.getPixel(t,hCenter), self.color):
+            if self.win.getPixel(t,hCenter) != self.color:
                 canContinue = False
                 for jump in range(0,40,2):
-                    if eqColor(self.win.getPixel(t+jump,hCenter), self.color): # try to jump over the text if exist
+                    if self.win.getPixel(t+jump,hCenter) == self.color: # try to jump over the text if exist
                         t+=jump+1
                         canContinue = True
                         break
@@ -105,7 +104,7 @@ class Button(object):
 
     def isBroken(self):
         # look at the bg-area on both points for the brokencolor
-        return eqColor(self.win.getPixel(self.bgArea[0], self.bgArea[1]), self.brokeBgColor) or eqColor(self.win.getPixel(self.bgArea[1], self.bgArea[2]), self.brokeBgColor)
+        return self.win.getPixel(self.bgArea[0], self.bgArea[1]) == self.brokeBgColor or self.win.getPixel(self.bgArea[1], self.bgArea[2]) == self.brokeBgColor
 
     def getBgArea(self):
         # first we need the button center
@@ -125,12 +124,12 @@ class Button(object):
             countTo = left+1000
         # find the border of the button
         for l in range(left, countTo, step):
-            if not eqColor(self.win.getPixel(top,l), self.color):
+            if self.win.getPixel(top,l) != self.color:
                 mLeft = l+(5*step) # go a little more left when we found the border of the button
                 break
         # then we go to the most left part from here
         for l in range(mLeft, countTo, step):
-            if not eqColor(self.win.getPixel(top,l), self.okBgColor):
+            if self.win.getPixel(top,l) != self.okBgColor:
                 mLeft = l+((-1)*step)
                 mTop = top
                 break
@@ -140,7 +139,7 @@ class Button(object):
         better = False
         for t in range(top, 0, -1):
             for l in range(mLeft, countTo, step):
-                if not eqColor(self.win.getPixel(t,l), self.okBgColor):
+                if self.win.getPixel(t,l) != self.okBgColor:
                     newMLeft = l+((-1)*step)
                     break
             if (step < 0 and newMLeft < mLeft) or (step > 0 and newMLeft > mLeft):
@@ -154,7 +153,7 @@ class Button(object):
         if not better:
             for t in range(top, top+200, 1):
                 for l in range(mLeft, countTo, step):
-                    if not eqColor(self.win.getPixel(t,l), self.okBgColor):
+                    if self.win.getPixel(t,l) != self.okBgColor:
                         newMLeft = l+((-1)*step)
                         break
                 if (step < 0 and newMLeft < mLeft) or (step > 0 and newMLeft > mLeft):
@@ -175,20 +174,20 @@ class Button(object):
         top = self.bgArea[0]
         left = self.bgArea[1]+10 # add a bit so it isn't too close to the border
         for t in range(top, top+200, 1):
-            if eqColor(self.win.getPixel(t,left), self.buttoneAreaColor):
+            if self.win.getPixel(t,left) == self.buttoneAreaColor:
                 top = t
                 break
         for t in range(top, top+200, 1):
-            if not eqColor(self.win.getPixel(t,left), self.buttoneAreaColor):
+            if self.win.getPixel(t,left) != self.buttoneAreaColor:
                 self.shopButton = (t+10, left) # found the shopButton
                 top = t+20
                 break
         for t in range(top, top+200, 1):
-            if eqColor(self.win.getPixel(t,left), self.buttoneAreaColor):
+            if self.win.getPixel(t,left) == self.buttoneAreaColor:
                 top = t
                 break
         for t in range(top, top+200, 1):
-            if not eqColor(self.win.getPixel(t,left), self.buttoneAreaColor):
+            if self.win.getPixel(t,left) != self.buttoneAreaColor:
                 self.repairButton = (t+10, left) # found the repairButton
                 top = t+20
                 break

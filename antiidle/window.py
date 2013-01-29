@@ -44,13 +44,6 @@ class SubWindow(Window):
         self.current_screen = autopy.bitmap.capture_screen(((self.offsetLeft,self.offsetTop),(self.width,self.height)))
         return self.current_screen
 
-
-
-
-# compares two colors for equality
-def eqColor(c1, c2):
-    return numpy.array_equal(c1, c2)
-
 # finds the top,left position of a color optionally starting at startX and startY
 def findColor(win, color, step=5, startX=0, startY=0):
     # first iterate to find the area around games
@@ -59,7 +52,7 @@ def findColor(win, color, step=5, startX=0, startY=0):
     # first search smallestX, smallestY
     for x in range(startX, win.height, step):
         for y in range(startY, win.width, step):
-            if eqColor(win.getPixel(x,y), color):
+            if win.getPixel(x,y) == color:
                 smallestX = x
                 smallestY = y
                 break
@@ -77,12 +70,12 @@ def findColorArea(win, color, step=5, startX=0, startY=0):
     if smallestX > -1:
         for y in range(smallestY, win.width, step):
             x = smallestX
-            if not eqColor(win.getPixel(smallestX,y), color):
+            if win.getPixel(smallestX,y) != color:
                 highestY = y-step
                 break
         for x in range(smallestX, win.height, step):
             y = smallestY
-            if not eqColor(win.getPixel(x,smallestY), color):
+            if win.getPixel(x,smallestY) != color:
                 highestX = x-step
                 break
     print (smallestX, smallestY, highestX, highestY)
