@@ -1,31 +1,41 @@
 #!/usr/bin/python
 from window import Window
 from window import SubWindow
-from window import getArrayColor
 from window import findColorArea
 from button import Button
-import time
-import sys
+#import time
+#import sys
 
 
 # finds the area of a kongregate game
 def findGameArea(win):
     print "searching area"
-    return findColorArea(win, getArrayColor("333333"), 1)
+    # favicons often have the same color, but are smaller in size
+    # so ignore this line
+    startX=0
+    x1=0
+    x2=0
+    while abs(x1-x2) < 200:
+        x1, y1, x2, y2 = findColorArea(win, 0x333333, 1, startX)
+        if x1 == -1:
+            return None
+        startX=x1+5
+
+    return SubWindow(win, x1, y1, abs(y1-y2), abs(x1-x2))
 
 
 def main():
     w = Window()
-    start = time.time()
+    #start = time.time()
     while True:
         print "search game area"
         w.getScreenShot()
-        x1, y1, x2, y2 = findGameArea(w)
-        if x1 > -1:
-            gameWin = SubWindow(w, x1, y1, abs(x1-x2), abs(y1-y2))
+        gameWin = findGameArea(w)
+        if gameWin is not None:
             print "found area"
             break
     gameWin.getScreenShot()
+    gameWin.current_screen.save("game1.png", "png")
     but = Button(gameWin)
     but.getBgArea()
     but.findShopAndRepair()
@@ -33,6 +43,8 @@ def main():
     broken = 0
     while True:
         i+=1
+        if i==50:
+            return
         if but.isBroken():
             broken += 1
             if broken == 5:
@@ -47,10 +59,13 @@ def main():
             broken = 0
         print "search button"
         gameWin.getScreenShot()
-        #butWin = SubWindow(gameWin, x1, y1, abs(x1-x2), abs(y1-y2))
-        #butWin.getScreenShot()
-        #gameWin.current_screen.save("game%d.png"%i, "png")
         x,y = but.findCenter()
+        butWin = SubWindow(gameWin, x-5, y-5, 15, 15)
+        butWin.getScreenShot()
+        butWin.current_screen.save("butwin.png", "png")
+        print x, y
+        print but.width
+        print but.height
         if but.width < 10 or but.height < 10: # not found
             continue
         print (x,y)

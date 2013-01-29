@@ -1,6 +1,5 @@
 #!/usr/bin/python
 
-from window import getArrayColor
 from window import eqColor
 from window import findColor
 
@@ -15,16 +14,16 @@ class Button(object):
     area = (0,0,0,0)
 
     # the color of the button - somethimes blue, sometimes red.. find it out..
-    color = [getArrayColor("c86400"), getArrayColor("0064c8")]
+    color = [0xc86400, 0x0064c8]
 
     # the bg color left and right from the button
-    brokeBgColor = getArrayColor("990000")
-    okBgColor = getArrayColor("666666")
+    brokeBgColor = 0x990000
+    okBgColor = 0x666666
 
     # the color surrounding the button area
-    buttoneAreaColor = getArrayColor("333333")
+    buttoneAreaColor = 0x333333
     # the color of a highlighted repairbutton
-    repairColor = getArrayColor("9b68e9")
+    repairColor = 0x9b68e9
 
     def __init__(self, win):
         self.win = win
