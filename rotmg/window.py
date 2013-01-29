@@ -58,24 +58,15 @@ class SubWindow(Window):
         self.current_screen = pb
         return self.current_screen
 
-    # override mousemethod to add the offset
-    def mouseMove(self, top, left):
-        print "move",(self.offsetLeft+left, self.offsetTop+top)
-        self.mouse.move(self.offsetLeft+left, self.offsetTop+top)
-        print self.mouse.position()
-
-    def mouseClick(self, top, left, key=1):
-        print "click",(self.offsetLeft+left, self.offsetTop+top, key)
-        self.mouse.press(self.offsetLeft+left, self.offsetTop+top, key)
-        self.mouse.release(self.offsetLeft+left, self.offsetTop+top, key)
-        print self.mouse.position()
-
-
 
 
 
 # compares two colors for equality
 def eqColor(c1, c2):
+    if not isinstance(c1, (list, tuple, numpy.ndarray)):
+        c1 = autopy.color.hex_to_rgb(c1)
+    if not isinstance(c2, (list, tuple, numpy.ndarray)):
+        c2 = autopy.color.hex_to_rgb(c2)
     return numpy.array_equal(c1, c2)
 
 # finds the top,left position of a color optionally starting at startX and startY
