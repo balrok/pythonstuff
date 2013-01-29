@@ -1,5 +1,4 @@
 import gtk.gdk
-from pymouse import PyMouse
 import autopy
 import numpy
 
@@ -7,25 +6,21 @@ class Window:
     current_screen = None
     width = 0,
     height = 0
-    mouse = None
     offsetTop = 0
     offsetLeft = 0
 
-
-    def __init__(self):
-        self.mouse = PyMouse()
-
     def mouseMove(self, top, left):
-        self.mouse.move(top, left)
+        print "move",(self.offsetLeft+left, self.offsetTop+top)
+        autopy.mouse.move(self.offsetLeft+left, self.offsetTop+top)
+        print autopy.mouse.get_pos()
 
-    def mouseClick(self, top, left, key=1):
-        self.mouse.press(left, top, key)
-        self.mouse.release(left, top, key)
+    def mouseClick(self, top, left, key=autopy.mouse.LEFT_BUTTON):
+        self.mouseMove(top,left)
+        autopy.mouse.click(key)
 
     def getScreenShot(self):
         w = gtk.gdk.get_default_root_window()
         sz = w.get_size()
-
         pb = gtk.gdk.Pixbuf(gtk.gdk.COLORSPACE_RGB,False,8, sz[0], sz[1])
         pb = pb.get_from_drawable(w,w.get_colormap(), 0, 0, 0, 0, sz[0], sz[1])
         self.width,self.height = pb.get_width(),pb.get_height()
@@ -47,7 +42,6 @@ class SubWindow(Window):
         self.width = width
         self.height = height
         self.parentWin = parentWin
-        self.mouse = parentWin.mouse
 
     # override to just shoot the smaller screen
     def getScreenShot(self):
