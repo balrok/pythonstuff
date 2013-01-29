@@ -3,7 +3,7 @@ from window import Window
 from window import SubWindow
 from window import findColorArea
 from button import Button
-#import time
+import time
 #import sys
 
 
@@ -17,6 +17,7 @@ def findGameArea(win):
     x2=0
     while abs(x1-x2) < 200:
         x1, y1, x2, y2 = findColorArea(win, 0x333333, 1, startX)
+        print x1,y1,x2,y2
         if x1 == -1:
             return None
         startX=x1+5
@@ -26,10 +27,11 @@ def findGameArea(win):
 
 def main():
     w = Window()
-    #start = time.time()
+    start = time.time()
     while True:
         print "search game area"
         w.getScreenShot()
+        w.current_screen.save("test.png")
         gameWin = findGameArea(w)
         if gameWin is not None:
             print "found area"
@@ -43,8 +45,8 @@ def main():
     broken = 0
     while True:
         i+=1
-        if i==50:
-            return
+        if i==200:
+            break
         if but.isBroken():
             broken += 1
             if broken == 5:
@@ -85,6 +87,7 @@ def main():
         #print but
         #if but[0] > -1:
         #    mouse.move(left+but[0], top+but[1])
+    print time.time()-start
 
 
 
