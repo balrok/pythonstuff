@@ -1,7 +1,6 @@
 from window import SubWindow
 from window import eqColor
 from window import findColorArea
-from window import getArrayColor
 from window import findColor
 
 # all gameobjects which have a window assigned
@@ -32,15 +31,15 @@ class Bar(WindowObject):
         self.width=abs(y1-y2)
 
     def findWindow(self, window, color):
-        x1,y1,x2,y2 = findColorArea(window, getArrayColor(color), 1)
+        x1,y1,x2,y2 = findColorArea(window, color, 1)
         return (x1,y1,x2,y2)
 
     def getPercentFull(self):
         # scan for bgcolor
         self.window.getScreenShot()
-        x,y = findColor(self.window, getArrayColor(self.bgcolor))
+        x,y = findColor(self.window, self.bgcolor)
         if y>-1:
-            x2,y2 = findColor(self.window, getArrayColor(self.barcolor))
+            x2,y2 = findColor(self.window, self.barcolor)
             # when hovering over items in a trade it will cover the bar
             # which causes to first display background and then healthbar
             if y2==0:
@@ -75,7 +74,7 @@ class Pot(WindowObject):
 
     def hasPot(self):
         self.window.getScreenShot()
-        return not eqColor(self.window.getPixel(0,0), getArrayColor(self.moneyColor))
+        return not eqColor(self.window.getPixel(0,0), self.moneyColor)
 
 class HealthPot(Pot):
     type='health'

@@ -1,14 +1,12 @@
 #!/usr/bin/python
 from window import Window
 from window import SubWindow
-from window import getArrayColor
 from window import findColorArea
 import time
 from gameobjects import HealthBar
 from gameobjects import HealthPot
 from gameobjects import ManaPot
 from autopy import key
-from autopy import color
 #import sys
 
 
@@ -21,7 +19,7 @@ def findGameArea(win):
     x1=0
     x2=0
     while abs(x1-x2) < 200:
-        x1, y1, x2, y2 = findColorArea(win, getArrayColor("333333"), 1, startX)
+        x1, y1, x2, y2 = findColorArea(win, 0x333333, 1, startX)
         if x1 == -1:
             return None
         startX=x1+5
@@ -31,20 +29,20 @@ def findGameArea(win):
 
 constants = {
     'healthbar': (290, 618, 305, 793),
-    'healthbarColor': 'e03434',
+    'healthbarColor': 0xe03434,
     'manabar': (314, 618, 322, 793),
-    'manabarColor': '6084e0',
-    'barBGColor': '545454', # background of health,mana,exp bar
-    'moneyColor': 'dcf100',
+    'manabarColor': 0x6084e0,
+    'barBGColor': 0x545454, # background of health,mana,exp bar
+    'moneyColor': 0xdcf100,
     'healthpotMoney': (515, 689),
     'manapotMoney': (515, 777)
 }
 
 def checkConstants(gameWin):
-    x1,y1,x2,y2 = findColorArea(gameWin, getArrayColor(constants['healthbarColor']), 1)
+    x1,y1,x2,y2 = findColorArea(gameWin, constants['healthbarColor'], 1)
     if constants['healthbar'] != (x1,y1,x2,y2):
         print "healthbar wrong"
-    x1,y1,x2,y2 = findColorArea(gameWin, getArrayColor(constants['manabarColor']), 1)
+    x1,y1,x2,y2 = findColorArea(gameWin, constants['manabarColor'], 1)
     if constants['manabar'] != (x1,y1,x2,y2):
         print "manabar wrong"
 

@@ -1,6 +1,6 @@
 import gtk.gdk
 from pymouse import PyMouse
-from autopy import color
+import autopy
 import numpy
 
 class Window:
@@ -80,6 +80,8 @@ def eqColor(c1, c2):
 
 # finds the top,left position of a color optionally starting at startX and startY
 def findColor(win, color, step=5, startX=0, startY=0):
+    if not isinstance(color, (list, tuple)):
+        color = autopy.color.hex_to_rgb(color)
     # first iterate to find the area around games
     smallestX = -1
     smallestY = -1
@@ -96,6 +98,8 @@ def findColor(win, color, step=5, startX=0, startY=0):
 
 # finds the top,left position and from there the most right and lowest position
 def findColorArea(win, color, step=5, startX=0, startY=0):
+    if not isinstance(color, (list, tuple)):
+        color = autopy.color.hex_to_rgb(color)
     # first iterate to find the area around games
     highestX = -1
     highestY = -1
@@ -114,12 +118,3 @@ def findColorArea(win, color, step=5, startX=0, startY=0):
                 break
     print (smallestX, smallestY, highestX, highestY)
     return smallestX, smallestY, highestX, highestY
-
-
-def getArrayColor(c):
-    return color.hex_to_rgb(int(c, 16))
-
-
-if __name__=='__main__':
-    a = getArrayColor('333333')
-    assert(eqColor((51,51,51),a))
