@@ -1,5 +1,7 @@
 import gtk.gdk
 from pymouse import PyMouse
+from autopy import color
+import numpy
 
 class Window:
     current_screen = None
@@ -72,13 +74,9 @@ class SubWindow(Window):
 
 
 
-# returns a html-like color as int-array
-def getArrayColor(color):
-    return [int(color[0:2], 16), int(color[2:4], 16), int(color[4:6], 16)]
-
 # compares two colors for equality
 def eqColor(c1, c2):
-    return c1[0] == c2[0] and c1[1] == c2[1] and c1[2] == c2[2]
+    return numpy.array_equal(c1, c2)
 
 # finds the top,left position of a color optionally starting at startX and startY
 def findColor(win, color, step=5, startX=0, startY=0):
@@ -116,3 +114,12 @@ def findColorArea(win, color, step=5, startX=0, startY=0):
                 break
     print (smallestX, smallestY, highestX, highestY)
     return smallestX, smallestY, highestX, highestY
+
+
+def getArrayColor(c):
+    return color.hex_to_rgb(int(c, 16))
+
+
+if __name__=='__main__':
+    a = getArrayColor('333333')
+    assert(eqColor((51,51,51),a))
