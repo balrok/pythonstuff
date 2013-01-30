@@ -33,8 +33,8 @@ import Image
 for pic in root.xpath("//Pic"):
     id = pic.get("id")
     name= pic.find("PicName").text
-    fn = os.path.join(os.path.dirname(sys.argv[0]),"pics","%s.png" % id)
-    fn_rescale = os.path.join(os.path.dirname(sys.argv[0]),"pics","%s_rescale.png" % id)
+    fn = os.path.join(os.path.dirname(sys.argv[0]), "img", "items","%s.png" % id)
+    fn_rescale = os.path.join(os.path.dirname(sys.argv[0]), "img", "items","%s_rescale.png" % id)
     if os.path.exists(fn) and not os.path.exists(fn_rescale):
         im1 = Image.open(fn)
         im2 = im1.resize((32, 32), Image.NEAREST)

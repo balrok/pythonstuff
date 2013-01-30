@@ -6,6 +6,8 @@ import time
 from gameobjects import HealthBar
 from gameobjects import HealthPot
 from gameobjects import ManaPot
+from gameobjects import InventoryWindow
+from gameobjects import LootWindow
 from autopy import key
 #import sys
 
@@ -35,7 +37,9 @@ constants = {
     'barBGColor': 0x545454, # background of health,mana,exp bar
     'moneyColor': 0xdcf100,
     'healthpotMoney': (515, 689),
-    'manapotMoney': (515, 777)
+    'manapotMoney': (515, 777),
+    'lootWindow': ((535, 611), (191,106)),
+    'inventoryWindow': ((412, 613), (191,94))
 }
 
 def checkConstants(gameWin):
@@ -66,6 +70,11 @@ def main():
     manapot = ManaPot(gameWin, constants)
     manapot.saveScreenshot('manapotmoney')
 
+    inventory = InventoryWindow(gameWin, constants)
+    inventory.saveScreenshot('inventory')
+    loot = LootWindow(gameWin, constants)
+    loot.saveScreenshot('loot')
+
     if not healthpot.hasPot():
         print "no health pots"
     if not manapot.hasPot():
@@ -73,12 +82,21 @@ def main():
 
     i=0
     checknextHealth = 0
+    checknextLoot = 0
     nextSpell = 0
     healthHistory = []
     while True:
         time.sleep(0.05)
         i+=1
         print i
+        if i > checknextLoot:
+            if inventory.hasSpace():
+                print "hasSpace"
+            if loot.hasLoot():
+                if inventory.hasSpace():
+                    print "hasSpace"
+                print "hasloot"
+            checknextLoot = i+10
         if i > checknextHealth:
             full = healthbar.getPercentFull()
             if full < 50:

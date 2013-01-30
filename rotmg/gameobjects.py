@@ -1,6 +1,8 @@
 from window import SubWindow
 from window import findColorArea
 from window import findColor
+import autopy
+import os
 
 # all gameobjects which have a window assigned
 class WindowObject(object):
@@ -64,8 +66,6 @@ class Pot(WindowObject):
     window=None
     moneyColor=''
     def __init__(self, window, constants):
-        if not self.type+"potMoney" in constants:
-            raise Exception(self.type+"potMoney should be defined")
         self.moneyColor = constants['moneyColor']
         x1, y1 = constants[self.type+'potMoney']
         self.window = SubWindow(window, x1, y1, 1, 1)
@@ -85,3 +85,31 @@ class ManaPot(Pot):
     def __init__(self, window, constants):
         Pot.__init__(self, window, constants)
 
+
+class ItemWindow(WindowObject):
+    type='default'
+    window=None
+    def __init__(self, window, constants):
+        rec = constants[self.type+'Window']
+        self.window = SubWindow(window, rec[0][0], rec[0][1], rec[1][0], rec[1][1])
+        WindowObject.__init__(self, self.window, window)
+
+class InventoryWindow(ItemWindow):
+    type="inventory"
+    def __init__(self, window, constants):
+        ItemWindow.__init__(self, window, constants)
+        self.item_space = autopy.bitmap.Bitmap.open(os.path.join('img', 'item_space.png'))
+    def hasSpace(self):
+        self.window.getScreenShot()
+        coord = self.window.current_screen.find_bitmap(self.item_space, 0.2)
+        return coord is not None
+
+class LootWindow(ItemWindow):
+    type="loot"
+    def __init__(self, window, constants):
+        ItemWindow.__init__(self, window, constants)
+        self.bottom_right = autopy.bitmap.Bitmap.open(os.path.join('img', 'loot_bottom_right.png'))
+    def hasLoot(self):
+        self.window.getScreenShot()
+        coord = self.window.current_screen.find_bitmap(self.bottom_right, 0.1, None, 0)
+        return coord is not None
