@@ -1,5 +1,4 @@
 from window import SubWindow
-from window import eqColor
 from window import findColorArea
 from window import findColor
 
@@ -74,7 +73,7 @@ class Pot(WindowObject):
 
     def hasPot(self):
         self.window.getScreenShot()
-        return not eqColor(self.window.getPixel(0,0), self.moneyColor)
+        return self.window.getPixel(0,0) != self.moneyColor
 
 class HealthPot(Pot):
     type='health'
