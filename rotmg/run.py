@@ -8,7 +8,7 @@ from gameobjects import HealthPot
 from gameobjects import ManaPot
 from gameobjects import InventoryWindow
 from gameobjects import LootWindow
-from autopy import key
+import autopy
 #import sys
 
 
@@ -39,7 +39,10 @@ constants = {
     'healthpotMoney': (515, 689),
     'manapotMoney': (515, 777),
     'lootWindow': ((535, 611), (191,106)),
-    'inventoryWindow': ((412, 613), (191,94))
+    'lootWindowOpen': (67, 156),
+    'lootColor': 0x545454,
+    'inventoryWindow': ((412, 613), (191,94)),
+    'lootItems': ['9200287', '9212327']
 }
 
 def checkConstants(gameWin):
@@ -90,12 +93,17 @@ def main():
         i+=1
         print i
         if i > checknextLoot:
-            if inventory.hasSpace():
-                print "hasSpace"
             if loot.hasLoot():
-                if inventory.hasSpace():
-                    print "hasSpace"
-                print "hasloot"
+                coords = loot.getLootPositions()
+                loot.saveScreenshot('loot%d'%i)
+                if coords != []:
+                    x, y = autopy.mouse.get_pos()
+                    for coord in coords:
+                        print "foundloot"
+                        loot.window.mouseMove(coord[0], coord[1])
+                        loot.window.mouseClick()
+                        loot.window.mouseClick()
+                    autopy.mouse.move(x, y)
             checknextLoot = i+10
         if i > checknextHealth:
             full = healthbar.getPercentFull()
@@ -113,17 +121,17 @@ def main():
                     #healthpot.saveScreenshot("takepot%d"% i)
                     healthbar.saveScreenshot("bartakepot%d"% i)
                     print "send f"
-                    key.tap('f')
+                    autopy.key.tap('f')
                     healthHistory.append(i)
 
                 else:
                     checknextHealth = i+200
                     # no healthpot left - going home
                     print "send g"
-                    key.tap('g')
+                    autopy.key.tap('g')
             elif full < 80:
                 if nextSpell < i:
-                    key.tap(' ')
+                    autopy.key.tap(' ')
                     print "space"
                     nextSpell=i+200
 

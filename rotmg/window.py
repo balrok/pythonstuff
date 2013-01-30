@@ -1,5 +1,4 @@
 import autopy
-import numpy
 
 class Window:
     current_screen = None
@@ -13,8 +12,7 @@ class Window:
         autopy.mouse.move(self.offsetLeft+left, self.offsetTop+top)
         print autopy.mouse.get_pos()
 
-    def mouseClick(self, top, left, key=autopy.mouse.LEFT_BUTTON):
-        self.mouseMove(top,left)
+    def mouseClick(self, key=autopy.mouse.LEFT_BUTTON):
         autopy.mouse.click(key)
 
     def getScreenShot(self):

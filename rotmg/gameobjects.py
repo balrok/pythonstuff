@@ -109,7 +109,29 @@ class LootWindow(ItemWindow):
     def __init__(self, window, constants):
         ItemWindow.__init__(self, window, constants)
         self.bottom_right = autopy.bitmap.Bitmap.open(os.path.join('img', 'loot_bottom_right.png'))
+        # to speed up detection use a 1x1 pixel to detect if loot is available
+        self.singlePixel = SubWindow(self.window, constants['lootWindowOpen'][0], constants['lootWindowOpen'][1], 1, 1)
+        self.lootColor = constants['lootColor']
+        self.lootItems = []
+        for i in constants['lootItems']:
+            bmp =  autopy.bitmap.Bitmap.open(os.path.join('img', 'items', i+'_rescale.png'))
+            self.lootItems.append(bmp)
+
     def hasLoot(self):
-        self.window.getScreenShot()
-        coord = self.window.current_screen.find_bitmap(self.bottom_right, 0.1, None, 0)
-        return coord is not None
+        return True
+        self.singlePixel.getScreenShot()
+        if self.singlePixel.getPixel(0,0) == self.lootColor:
+            self.window.getScreenShot()
+            coord = self.window.current_screen.find_bitmap(self.bottom_right, 0.1, None, 0)
+            return coord is not None
+
+    def getLootPositions(self):
+        coords = []
+        self.window.current_screen = autopy.bitmap.Bitmap.open(os.path.join('loot56.png'))
+        for item in self.lootItems:
+            coord = self.window.current_screen.find_bitmap(item, 0.1, None, 0)
+            print coord
+            if coord is not None:
+                coords.append(coord)
+        print coords
+        return coords
