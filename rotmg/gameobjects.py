@@ -118,7 +118,6 @@ class LootWindow(ItemWindow):
             self.lootItems.append(bmp)
 
     def hasLoot(self):
-        return True
         self.singlePixel.getScreenShot()
         if self.singlePixel.getPixel(0,0) == self.lootColor:
             self.window.getScreenShot()
@@ -127,11 +126,8 @@ class LootWindow(ItemWindow):
 
     def getLootPositions(self):
         coords = []
-        self.window.current_screen = autopy.bitmap.Bitmap.open(os.path.join('loot56.png'))
         for item in self.lootItems:
             coord = self.window.current_screen.find_bitmap(item, 0.1, None, 0)
-            print coord
             if coord is not None:
                 coords.append(coord)
-        print coords
         return coords
