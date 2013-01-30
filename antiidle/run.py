@@ -55,7 +55,7 @@ def main():
                 x = but.repairButton[0]
                 y = but.repairButton[1]
                 gameWin.mouseMove(x, y)
-                gameWin.mouseClick(x, y)
+                gameWin.mouseClick()
                 #break
         else:
             broken = 0
@@ -72,7 +72,7 @@ def main():
             continue
         print (x,y)
         gameWin.mouseMove(x, y)
-        gameWin.mouseClick(x, y)
+        gameWin.mouseClick()
 
         #x1,y1,x2,y2 = but.area
         #butWin = SubWindow(gameWin, x1, y1, abs(x1-x2), abs(y1-y2))
