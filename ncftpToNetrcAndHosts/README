@@ -1,0 +1,5 @@
+intended to convert the bookmarks from ncftp to netrc and hosts
+
+hosts is just for creating the names
+all changes must be applied by hand - this tool will only output the config entries
+which are required

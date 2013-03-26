@@ -23,3 +23,4 @@ The current content is:
 * antiidle: A util to play the Flashgame anti-idle - currently only the button-game is supported
 * rotmg: A util to play the Flashgame return of the mad god - currently only use a potion automatically when low on health
 * extension: A util to add an extension point to your project: will load files in a folder based on regex- or name- match
+* ncftpToNetrcAndHosts: Will convert .ncftp bookmarks to netrc/hosts entries

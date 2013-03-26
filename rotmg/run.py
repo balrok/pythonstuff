@@ -85,7 +85,7 @@ def main():
 
     i=0
     checknextHealth = 0
-    checknextLoot = 0
+    checknextLoot = 9999990
     nextSpell = 0
     healthHistory = []
     while True:
@@ -104,7 +104,7 @@ def main():
                         loot.window.mouseClick()
                         loot.window.mouseClick()
                     autopy.mouse.move(x, y)
-            checknextLoot = i+10
+            checknextLoot = i+80
         if i > checknextHealth:
             full = healthbar.getPercentFull()
             if full < 50:
@@ -133,7 +133,7 @@ def main():
                 if nextSpell < i:
                     autopy.key.tap(' ')
                     print "space"
-                    nextSpell=i+200
+                    nextSpell=i+20
 
 
 
