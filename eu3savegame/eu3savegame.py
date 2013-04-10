@@ -18,10 +18,10 @@ def lookahead2(iterable, aFunction):
         else:
             prev2 = prev
             prev = item
-    (ret, jump) = aFunction(iterable, prev, item, "")
+    (ret, jump) = aFunction(iterable, prev2, prev, "")
     for r in ret:
         yield r
-    (ret, jump) = aFunction(iterable, item, "", "")
+    (ret, jump) = aFunction(iterable, prev, "", "")
     for r in ret:
         yield r
 
