@@ -2,14 +2,18 @@
 import sys
 import re
 
+# runs over iterable and then
 # calls a function with 3 items of the generator (current, next1, next2)
 # if next1/next2 wont exist they get the value ""
 # the aFunction must look like this func(current, next1, next2)
+# and return (iterable, jump)
+# iterable will get yielded and jump says the next item doesn't get used
+# this function is not specific to eu3
 def lookahead2(iterable, aFunction):
     prev2 = iterable.next()
     prev = iterable.next()
     for item in iterable:
-        (ret, jump) = aFunction(iterable, prev2, prev, item)
+        (ret, jump) = aFunction(prev2, prev, item)
         for r in ret:
             yield r
         if jump:
@@ -18,14 +22,15 @@ def lookahead2(iterable, aFunction):
         else:
             prev2 = prev
             prev = item
-    (ret, jump) = aFunction(iterable, prev2, prev, "")
+    (ret, jump) = aFunction(prev2, prev, "")
     for r in ret:
         yield r
-    (ret, jump) = aFunction(iterable, prev, "", "")
+    (ret, jump) = aFunction(prev, "", "")
     for r in ret:
         yield r
 
-def fixReader(iterable, line, line1, line2):
+# eu3 specific fixer for the fileformat to be easy parsable
+def fixReader(line, line1, line2):
     x = line.find("=")
     if x != -1:
         if line.find("=", x+1) != -1:
@@ -47,6 +52,8 @@ def fixReader(iterable, line, line1, line2):
     else:
         return ((line,), False)
 
+# the basic parse function for those files
+# it would work nicely if there were no exceptions inside the file format
 def parse(file):
     obj = []
     for line in file:
@@ -62,6 +69,7 @@ def parse(file):
             pass #print line
     return obj
 
+# helper for parse
 def getVal(file, val):
     if val.find("{") != -1 and val.find("}") != -1:
         return val
@@ -69,7 +77,7 @@ def getVal(file, val):
         return parse(file)
     return val
 
-
+# writes a string into a file in eu3-save format
 def unparse(file, obj, depth=0):
     padding = "\t"*depth
     for line in obj:
