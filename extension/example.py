@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-from extension import ExtensionRegistrator
+from Extension import ExtensionRegistrator
 
 ext = ExtensionRegistrator()
 ext.loadFolder('example/') # should end with a /

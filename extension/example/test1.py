@@ -1,4 +1,4 @@
-from extension import Extension
+from Extension import Extension
 
 # I want to show here, that you easily can add a extension to your existing classes without changing their code
 class Test1(object):

@@ -1,4 +1,4 @@
-from extension import Extension
+from Extension import Extension
 
 class Generic(Extension):
     eregex = '.*'

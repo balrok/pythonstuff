@@ -53,12 +53,17 @@ class ExtensionRegistrator(object):
                 return i
 
     def getExtensionByRegexStringMatch(self, string):
-        match = None
+        for ext in self.getExtensionsByRegexStringMatch(self, string):
+            return ext
+
+    def getExtensionsByRegexStringMatch(self, string):
+        match = []
         for i in self.extensions:
             if i.eregex:
                 if i.eregex.match(string):
                     if i.elowestPriority:
-                        match = i
+                        match.append(i)
                     else:
-                        return i
-        return match
+                        yield i
+        for i in match:
+            yield i
