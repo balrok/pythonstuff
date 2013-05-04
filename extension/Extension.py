@@ -1,3 +1,4 @@
+# coding=utf-8
 import os
 import glob
 import imp
@@ -12,14 +13,14 @@ import re
 class Extension(object):
     ename = None # name is required
     eregex = '' # regex can be empty
-    elowestPriority = False # this extension should be used just as last resort (mostly when very generic regexes)
+    ePriority = 0 # Extensions with a higher priority come first - default is 0
 
 
 def get_subclasses(mod, cls):
     """Yield the classes in module ``mod`` that inherit from ``cls``"""
     for name, obj in inspect.getmembers(mod):
         if hasattr(obj, "__bases__"):
-            if cls in obj.__bases__:
+            if cls != obj and cls in obj.mro()[:-1]:
                 yield obj
 
 class ExtensionRegistrator(object):
@@ -34,12 +35,13 @@ class ExtensionRegistrator(object):
             for ext in get_subclasses(mod, Extension):
                 if ext not in self.extensions:
                     self.register(ext)
+        self.extensions.sort(key=lambda x: x.ePriority, reverse=True)
 
     def register(self, ext):
         if ext in self.extensions:
             return
         if not ext.ename or ext.ename == '':
-            raise Exception('Each extension needs a name')
+            raise Exception('Each extension needs a name (%s)' % ext.__name__)
         if self.getExtensionByName(ext.ename):
             raise Exception('The Name of the extension should be unique (%s, %s)' % (ext.ename, repr(ext)))
         if ext.eregex:
@@ -47,23 +49,20 @@ class ExtensionRegistrator(object):
                 ext.eregex = re.compile(ext.eregex)
         self.extensions.append(ext)
 
+    def initAll(self, *args):
+        for i in range(0, len(self.extensions)):
+            self.extensions[i] = self.extensions[i](*args)
+
     def getExtensionByName(self, name):
         for i in self.extensions:
             if i.ename == name:
                 return i
 
     def getExtensionByRegexStringMatch(self, string):
-        for ext in self.getExtensionsByRegexStringMatch(self, string):
+        for ext in self.getExtensionsByRegexStringMatch(string):
             return ext
 
     def getExtensionsByRegexStringMatch(self, string):
-        match = []
         for i in self.extensions:
-            if i.eregex:
-                if i.eregex.match(string):
-                    if i.elowestPriority:
-                        match.append(i)
-                    else:
-                        yield i
-        for i in match:
-            yield i
+            if i.eregex and i.eregex.match(string):
+                yield i
