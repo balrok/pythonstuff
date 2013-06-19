@@ -1,5 +1,6 @@
 pythonstuff
 ===========
+
         .--.                  _   _                     _          __  __      .--.
        |o_o |     _ __  _   _| |_| |__   ___  _ __  ___| |_ _   _ / _|/ _|    |o_o |
        |:_/ |    | '_ \| | | | __| '_ \ / _ \| '_ \/ __| __| | | | |_| |_     |:_/ |
@@ -24,3 +25,4 @@ The current content is:
 * rotmg: A util to play the Flashgame return of the mad god - currently only use a potion automatically when low on health
 * extension: A util to add an extension point to your project: will load files in a folder based on regex- or name- match
 * ncftpToNetrcAndHosts: Will convert .ncftp bookmarks to netrc/hosts entries
+* http a library for the http(s)-protocol - but requests is way better. I keep it for historic reasons :)
