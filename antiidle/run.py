@@ -44,9 +44,10 @@ def main():
     i=0
     broken = 0
     while True:
+        time.sleep(0.02)
         i+=1
-        if i==200:
-            break
+        #if i==200:
+        #    break
         if but.isBroken():
             broken += 1
             if broken == 5:
