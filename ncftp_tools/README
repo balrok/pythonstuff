@@ -1,5 +1,28 @@
-intended to convert the bookmarks from ncftp to netrc and hosts
+bookmarkdump
+============
+Will dump the bookmarkfile in a nice format
+intended for sharing it with other people
+can also dump just a single entry
 
-hosts is just for creating the names
-all changes must be applied by hand - this tool will only output the config entries
-which are required
+Format looks like this:
+
+$ python bookmarkdump.py /home/balrok/.ncftp/bookmarks test
+only dumping: test
+Alias: test
+-------------
+    Host:       balrok.com:21
+    Username:   testuser
+    Password:   test123
+    Folder:     /home/test
+    lastchange: 1396132649
+    lastip:     46.38.239.171
+    Connector:  ftp://testuser:test123@balrok.com:21/home/test
+
+
+ncftptonetrcandhosts
+====================
+    intended to convert the bookmarks from ncftp to netrc and hosts
+
+    hosts is just for creating the names
+    all changes must be applied by hand - this tool will only output the config entries
+    which are required
