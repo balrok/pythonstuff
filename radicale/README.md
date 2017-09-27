@@ -39,3 +39,15 @@ if [[ $CHANGED_CONTACTS -gt 0 ]]; then
     python3 birthday.py -i collections/collection-root/cmai/7808157f-e15c-288f-f103-2e85c002bd79/ -o collections/collection-root/cmai/2be82432-c6d8-ae01-e76d-cc5778775899
 fi
 ```
+
+
+## Merge Contacts
+
+The vcardlib.py is from https://github.com/mbideau/vcardtools
+You give it two folders and it will look for similar items (based on name) - those are merged.. and saved.
+The originals are deleted and a symlink is created.
+
+Example call:
+* `./contact_diff.py folder1 folder2` will just print out the files for merging and their content
+* `./contact_diff.py folder1 folder2 -o new` will store the merged contacts into folder "new"
+* `./contact_diff.py folder1 folder2 -o new -s` will store the merged contacts into folder "new", delete originals and place a symlink
