@@ -93,7 +93,7 @@ def merge_duplicates(all):
     return merged
 
 def duplicates(contacts, folder):
-    print(f"Checking duplicates for {folder}")
+    print("Checking duplicates for "+folder)
     names = list(contacts.keys())
     duplicates = []
     for idx, name1 in enumerate(names[:-1]):
