@@ -5,13 +5,7 @@ import vobject
 import argparse
 import os
 import shlex
-
 import vcardlib
-vcardlib.OPTION_MATCH_APPROX_SAME_FIRST_LETTER = False
-vcardlib.OPTION_MATCH_APPROX_STARTSWITH = False
-vcardlib.OPTION_MATCH_APPROX_RATIO = 90
-vcardlib.OPTION_MATCH_APPROX_MIN_LENGTH = 5
-vcardlib.OPTION_MATCH_APPROX_MAX_DISTANCE = range(-3, 3)
 
 def main():
     parser = argparse.ArgumentParser(description="Compare two folders containing vcards")
@@ -37,7 +31,6 @@ def write_symlinks(changes):
             print("rm "+shlex.quote(f))
             print("ln -s "+shlex.quote(os.path.abspath(new))+" "+shlex.quote(f))
             #os.remove(f)
-        
 
 def write_changes(out_dir, changes):
     if not os.path.exists(out_dir):
@@ -56,8 +49,6 @@ def write_changes(out_dir, changes):
         obj["new_filename"] = filename
     return changes
 
-
-
 def run(folder_a, folder_b):
     print(folder_a)
     print(folder_b)
@@ -73,9 +64,21 @@ def run(folder_a, folder_b):
         else:
             all[name].extend(c_b[name][:])
 
+    all = remove_same_symlinks(all)
+
     duplicates(all, "all")
     return merge_duplicates(all)
 
+# removes symlinks to the same file
+def remove_same_symlinks(all):
+    for name in all:
+        if len(all[name])>1:
+            realpathes = {}
+            for v in all[name]:
+                p = os.path.join(v["folder"], v["file"])
+                realpathes[os.path.realpath(p)] = v
+            all[name] = list(realpathes.values())
+    return all
 
 def merge_duplicates(all):
     merged = []
@@ -86,7 +89,6 @@ def merge_duplicates(all):
             attributes = vcardlib.collect_attributes(vcards)
             vcardlib.set_name(attributes)
             new = vcardlib.build_vcard(attributes)
-            print(name, len(all[name]))
             print(new.prettyPrint())
             obj = {"vcard":new, "filenames":filenames}
             merged.append(obj)
@@ -97,8 +99,11 @@ def duplicates(contacts, folder):
     names = list(contacts.keys())
     duplicates = []
     for idx, name1 in enumerate(names[:-1]):
+        sname1 = tuple(sorted(name1.split(" ")))
         for name2 in names[idx+1:]:
-            if vcardlib.match_approx(name1, name2):
+            sname2 = tuple(sorted(name2.split(" ")))
+            if sname1 == sname2:
+                print("Found duplicate "+name1 + " -> "+name2)
                 duplicates.append((name1, name2))
     for name1, name2 in duplicates:
         contacts[name1].extend(contacts[name2])
@@ -114,9 +119,6 @@ def get_contacts(folder):
                 contacts[name] = []
             contacts[name].append({"vcard":vcard, "folder":folder, "file":f})
     return contacts
-
-
-
 
 if __name__ == "__main__":
     main()
