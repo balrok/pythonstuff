@@ -165,6 +165,11 @@ def main():
     parser.add_argument("-o", dest="output")
     args = parser.parse_args()
     
+    if not os.access(args.output, os.W_OK):
+        raise Exception("not writable output directory")
+    for i in args.input:
+        if not os.access(i, os.R_OK):
+            raise Exception("not readable input directory")
     birthdays = parse_files(args.input)
     
     if args.output:
@@ -176,11 +181,13 @@ def main():
                 output_data = calendar.to_ical()
                 with open(os.path.join(args.output, "birthday_"+str(c)+".ics"), "wb") as fh:
                     fh.write(output_data)
+            print("Created %d calendars in dir %s" % (c, args.output))
         else:
             calendar = generate_calendar(birthdays)
             output_data = calendar.to_ical()
             with open(args.output, "wb") as fh:
                 fh.write(output_data)
+            print("Created single calendar in %s" % args.output)
     else:
         calendar = generate_calendar(birthdays)
         output_data = calendar.to_ical()
